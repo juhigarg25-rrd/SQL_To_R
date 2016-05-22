@@ -17,25 +17,31 @@ library(dplyr)
 
 #SHIPMENT_WEEK_SUMMARY
 finaldf1 <- merge(select(ToTest, Origin.State, Dest.State, Ship.Date,Cost),
-                 select(TestShipmentGroup, Origin.State2, Dest.State2, Ship.Date2), all=TRUE) %>%
-             filter ((Ship.Date >= (Ship.Date2-as.difftime(7, unit="days")))
+                  select(TestShipmentGroup, Origin.State2, Dest.State2, Ship.Date2), all=TRUE) %>%
+  filter ((Ship.Date >= (Ship.Date2-as.difftime(7, unit="days")))
           & (Ship.Date < Ship.Date2)
           & (Origin.State == Origin.State2)
           & (Dest.State == Dest.State2))
 
-ShipmentWeekSummary<-select(finaldf1,Origin.State, Dest.State, Ship.Date,Cost)
+ShipmentWeekSummary<-finaldf1%>%
+  group_by(Ship.Date2, Origin.State2,Dest.State2)%>%
+  summarise(AverageCostWeek=mean(Cost,na.rm=TRUE),ShipmentCountWeek=n())%>%arrange(desc(Ship.Date2))
+
 
 
 #SHIPMENT_MONTH_SUMMARY
 finaldf2 <- merge(select(ToTest, Origin.State, Dest.State, Ship.Date,Cost),
-                 select(TestShipmentGroup, Origin.State2, Dest.State2, Ship.Date2), all=TRUE) %>%
+                  select(TestShipmentGroup, Origin.State2, Dest.State2, Ship.Date2), all=TRUE) %>%
   
   filter ((Ship.Date >= (Ship.Date2-as.difftime(30, unit="days")))
           & (Ship.Date < Ship.Date2)
           & (Origin.State == Origin.State2)
           & (Dest.State == Dest.State2))
 
-ShipmentMonthSummary<-select(finaldf2,Origin.State, Dest.State, Ship.Date,Cost)
+ShipmentMonthSummary<-finaldf2%>%
+  group_by(Ship.Date2, Origin.State2,Dest.State2)%>%
+  summarise(AverageCostWeek=mean(Cost,na.rm=TRUE),ShipmentCountWeek=n())%>%arrange(desc(Ship.Date2))
+
 
 #SHIPMENT_LAST_YEAR_WEEK_SUMMARY
 finaldf3 <- merge(select(ToTest, Origin.State, Dest.State, Ship.Date,Cost),
@@ -46,7 +52,10 @@ finaldf3 <- merge(select(ToTest, Origin.State, Dest.State, Ship.Date,Cost),
           & (Origin.State == Origin.State2)
           & (Dest.State == Dest.State2))
 
-ShipmentLastYearWeekSummary<-select(finaldf3,Origin.State, Dest.State, Ship.Date,Cost)
+ShipmentLastYearWeekSummary<-finaldf3%>%
+  group_by(Ship.Date2, Origin.State2,Dest.State2)%>%
+  summarise(AverageCostWeek=mean(Cost,na.rm=TRUE),ShipmentCountWeek=n())%>%arrange(desc(Ship.Date2))
+
 
 #SHIPMENT_LAST_YEAR_MONTH_SUMMARY
 finaldf4 <- merge(select(ToTest, Origin.State, Dest.State, Ship.Date,Cost),
@@ -57,6 +66,9 @@ finaldf4 <- merge(select(ToTest, Origin.State, Dest.State, Ship.Date,Cost),
           & (Origin.State == Origin.State2)
           & (Dest.State == Dest.State2))
 
-ShipmentLastYearMonthSummary<-select(finaldf4,Origin.State, Dest.State, Ship.Date,Cost)
+ShipmentLastYearMonthSummary<-finaldf4%>%
+  group_by(Ship.Date2, Origin.State2,Dest.State2)%>%
+  summarise(AverageCostWeek=mean(Cost,na.rm=TRUE),ShipmentCountWeek=n())%>%arrange(desc(Ship.Date2))
+
 
 
